@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .button {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.1s ease;
+            user-select: none;
+            min-width: 200px;
+        }
+
+        .button:hover {
+            background-color: #333;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+            background-color: #555;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .feedback {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <button class="button" onclick="copyToClipboard('E-Mail-Adresse')">Option 1</button>
+    <button class="button" onclick="copyToClipboard('Passwort')">Option 2</button>
+    
+    <div id="feedback" class="feedback">Kopiert!</div>
+
+    <script>
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showFeedback();
+            } catch (err) {
+                console.error('Fehler beim Kopieren:', err);
+                // Fallback für ältere Browser
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showFeedback();
+            }
+        }
+
+        function showFeedback() {
+            const feedback = document.getElementById('feedback');
+            feedback.classList.add('show');
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
